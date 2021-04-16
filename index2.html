@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuto - Metamask - web3</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Web3 -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+
+<body>
+    <h1>HTML / Metamask</h1>
+
+    <!-- getInfo -->
+    <button class="enableEthereumButton">Enable Ethereum</button>
+    <h2>Account: <span class="showAccount"></span></h2>
+    <h2>Block_count: <span class="showBlockCount"></span></h2>
+    <h2>Balance: <span class="showGetBalance"></span></h2>
+
+    <!-- sendTransactions -->
+    <input type="text" id='to' placeholder="envoyer à ..." style="width: 50%;" required>
+    <input type="number" id='amount' placeholder="montant" style="width: 10%;" required>
+    <button id="sendTx">Envoyer tx</button>
+    <h2>Tx_id: <span class="txId"></span></h2>
+
+    <script>
+        // declaration des variables
+        const ethereumButton = document.querySelector('.enableEthereumButton');
+        const showAccount = document.querySelector('.showAccount');
+        const showBlockCount = document.querySelector('.showBlockCount');
+        const showGetBalance = document.querySelector('.showGetBalance');
+
+        // Event declencher au clik du boutton
+        ethereumButton.addEventListener('click', () => {
+            componentWillMount();
+        });
+
+        // Synchronisation
+        async function componentWillMount() {
+            await this.loadWeb3()
+            await this.loadBlockchainData()
+        }
+
+        // Synchronisation de Web3
+        async function loadWeb3() {
+            if (window.web3) {
+                console.log('Connected with web3')
+                window.web3 = new Web3(window.web3.currentProvider)
+
+            } else if (window.ethereum) {
+                console.log('Connected with ethereum')
+                window.web3 = new Web3(window.ethereum)
+                await window.ethereum.enable()
+
+            } else {
+                window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+            }
+        }
+
+        // Synchronisation de ethereum
+        async function loadBlockchainData() {
+            const web3 = window.web3
+
+            // Load account
+            const accounts = await web3.eth.getAccounts()
+            const account = accounts[0]
+            showAccount.innerHTML = account
+
+            // getBalance
+            await web3.eth.getBalance(account, (err, wei) => {
+                showGetBalance.innerHTML = web3.utils.fromWei(wei, 'ether')
+            })
+
+            // getBlockCount
+            await web3.eth.getBlockNumber(function (error, result) {
+                showBlockCount.innerHTML = result
+            })
+        }
+
+        const sendButton = document.getElementById('sendTx')
+        const txIdSpan = document.querySelector('.txId');
+
+        sendButton.addEventListener('click', () => {
+            const receiver = document.getElementById('to').value;
+            const amount = document.getElementById('amount').value;
+            sendTx(receiver, amount);
+        });
+
+        async function sendTx(receiver, amount) {
+            const accounts = await web3.eth.getAccounts()
+            const sender = accounts[0]
+
+            web3.eth.sendTransaction({
+                to: receiver,
+                from: sender,
+                value: web3.utils.toWei(amount, "ether"),
+                gas: 30000
+            }, function (err, txid) {
+                txIdSpan.innerHTML = txid
+            });
+        }
+
+    </script>
+</body>
+
+</html>
