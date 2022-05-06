@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <!-- Web3 -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-</head>
+  </head>
 
-<body>
-    <h1>HTML / Metamask</h1>
+  <body>
+     <h1>HTML / Metamask</h1>
+    <div class="main">
 
-    <button class="enableEthereumButton">Enable Ethereum</button>
-    <h2>Account: <span class="showAccount"></span></h2>
-    <h2>Block_count: <span class="showBlockCount"></span></h2>
-    <h2>Balance: <span class="showGetBalance"></span></h2>
+      <button class="enableEthereumButton">Enable Ethereum</button>
+      <h2>Account: <span class="showAccount"></span></h2>
+      <h2>Block_count: <span class="showBlockCount"></span></h2>
+      <h2>Balance: <span class="showGetBalance"></span></h2>
 
-    <a href="index2.html">Tuto exemple 2</a>
+      <a href="index2.html">Tuto exemple 2</a>
+    </div>
     <script>
-        // First Metamask
-        const ethereumButton = document.querySelector('.enableEthereumButton');
-        const showAccount = document.querySelector('.showAccount');
+      // First Metamask
+      const ethereumButton = document.querySelector(".enableEthereumButton");
+      const showAccount = document.querySelector(".showAccount");
 
-        ethereumButton.addEventListener('click', () => {
-            getAccount();
+      ethereumButton.addEventListener("click", () => {
+        getAccount();
+      });
+
+      async function getAccount() {
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
         });
+        const account = accounts[0];
+        console.log(accounts);
+        showAccount.innerHTML = account;
+        // third Web3js
+        getBalance(account);
+      }
 
-        async function getAccount() {
-            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-            const account = accounts[0];
-            console.log(accounts)
-            showAccount.innerHTML = account;
-            // third Web3js
-            getBalance(account)
-        }
+      // Second Web3js (getBlockCount)
+      const web3 = new Web3(window.ethereum);
+      const showBlockCount = document.querySelector(".showBlockCount");
 
-        // Second Web3js (getBlockCount)
-        const web3 = new Web3(window.ethereum);
-        const showBlockCount = document.querySelector('.showBlockCount');
+      web3.eth.getBlockNumber(function (error, result) {
+        showBlockCount.innerHTML = result;
+      });
 
-        web3.eth.getBlockNumber(function (error, result) {
-            showBlockCount.innerHTML = result
-        })
-
-        // third Web3js (getBlockCount)
-        const showGetBalance = document.querySelector('.showGetBalance');
-        async function getBalance(wallet) {
-            web3.eth.getBalance(wallet)
-                    .then(result => showGetBalance.innerHTML = web3.utils.fromWei(result, 'ether'))
-        }
-
+      // third Web3js (getBlockCount)
+      const showGetBalance = document.querySelector(".showGetBalance");
+      async function getBalance(wallet) {
+        web3.eth
+          .getBalance(wallet)
+          .then(
+            (result) =>
+              (showGetBalance.innerHTML = web3.utils.fromWei(result, "ether"))
+          );
+      }
     </script>
-</body>
-
+  </body>
 </html>

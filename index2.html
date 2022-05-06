@@ -13,19 +13,21 @@
 
 <body>
     <h1>HTML / Metamask</h1>
-
-    <!-- getInfo -->
-    <button class="enableEthereumButton">Enable Ethereum</button>
-    <h2>Account: <span class="showAccount"></span></h2>
-    <h2>Block_count: <span class="showBlockCount"></span></h2>
-    <h2>Balance: <span class="showGetBalance"></span></h2>
-
-    <!-- sendTransactions -->
-    <input type="text" id='to' placeholder="envoyer à ..." style="width: 50%;" required>
-    <input type="number" id='amount' placeholder="montant" style="width: 10%;" required>
-    <button id="sendTx">Envoyer tx</button>
-    <h2>Tx_id: <span class="txId"></span></h2>
-
+    <div class="main">
+       
+        <!-- getInfo -->
+        <button class="enableEthereumButton">Enable Ethereum</button>
+        <h2>Account: <span class="showAccount"></span></h2>
+        <h2>Block_count: <span class="showBlockCount"></span></h2>
+        <h2>Balance: <span class="showGetBalance"></span></h2>
+        
+        <!-- sendTransactions -->
+        <input type="text" id='to' placeholder="envoyer à ..." style="width: 50%;" required>
+        <input type="number" id='amount' placeholder="montant" style="width: 10%;" required>
+        <button id="sendTx">Envoyer tx</button>
+        <h2>Tx_id: <span class="txId"></span></h2>
+        
+    </div>
     <script>
         // declaration des variables
         const ethereumButton = document.querySelector('.enableEthereumButton');
