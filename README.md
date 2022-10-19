@@ -1,6 +1,6 @@
 # html-metamask
 
-## exemple
+## Example
   - https://xdrkush.github.io/tuto-html-metamask/
 
 ## Pre-requize
